@@ -43,9 +43,7 @@ class QLearningAgent(ReinforcementAgent):
         ReinforcementAgent.__init__(self, **args)
 
         "*** YOUR CODE HERE ***"
-        self.qvals = util.Counter()
-        
-
+        self.qvalues = {}
 
     def getQValue(self, state, action):
         """
@@ -54,10 +52,11 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
-        if (state, action) not in self.qvals:
-          self.qvals[(state, action)] = 0.0
-        return self.qvals[(state, action)]
-        util.raiseNotDefined()
+        if (state, action) in self.qvalues:
+            return self.qvalues[(state, action)]
+        else:
+            return 0.0
+        # util.raiseNotDefined()
 
 
     def computeValueFromQValues(self, state):
@@ -68,14 +67,10 @@ class QLearningAgent(ReinforcementAgent):
           terminal state, you should return a value of 0.0.
         """
         "*** YOUR CODE HERE ***"
-        legalActions = self.getLegalActions(state)
-        if len(legalActions)==0:
-          return 0.0
-        tmp = util.Counter()
-        for action in legalActions:
-          tmp[action] = self.getQValue(state, action)
-        return tmp[tmp.argMax()] 
-        util.raiseNotDefined()
+        qvalues = [self.getQValue(state, action) for action in self.getLegalActions(state)]
+        if not len(qvalues): return 0.0
+        return max(qvalues)
+        # util.raiseNotDefined()
 
     def computeActionFromQValues(self, state):
         """
@@ -83,15 +78,16 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-        legalActions = self.getLegalActions(state)
-        if len(legalActions)==0:
-          return None
-        tmp = util.Counter()
-        for action in legalActions:
-          tmp[action] = self.getQValue(state, action)
-        return tmp.argMax() 
+        "*** YOUR CODE HERE ***"
+        best_value = self.getValue(state)
+        best_actions = [action for action in self.getLegalActions(state) \
+                        if self.getQValue(state, action) == best_value]
 
-        util.raiseNotDefined()
+        if not len(best_actions):
+            return None
+        else:
+            return random.choice(best_actions)
+        # util.raiseNotDefined()
 
     def getAction(self, state):
         """
@@ -108,14 +104,18 @@ class QLearningAgent(ReinforcementAgent):
         legalActions = self.getLegalActions(state)
         action = None
         "*** YOUR CODE HERE ***"
-        if len(legalActions)!=0:
-          if util.flipCoin(self.epsilon):
+        if util.flipCoin(self.epsilon):
             action = random.choice(legalActions)
-          else:
-            action = self.computeActionFromQValues(state)
+        else:
+            action = self.getPolicy(state)
+
+        return action
+        # util.raiseNotDefined()
+
         return action
 
-        util.raiseNotDefined()
+    def setQValue(self, state, action, value):
+        self.qvalues[(state, action)] = value
 
     def update(self, state, action, nextState, reward):
         """
@@ -127,12 +127,20 @@ class QLearningAgent(ReinforcementAgent):
           it will be called on your behalf
         """
         "*** YOUR CODE HERE ***"
-        self.qvals[(state,action)] =  ((1-self.alpha) * self.getQValue(state,action)) + self.alpha * (reward + self.discount * self.computeValueFromQValues(nextState))
+        disc = self.discount
+        alpha = self.alpha
+        qvalue = self.getQValue(state, action)
+        next_value = self.getValue(nextState)
+
+        # new_value = qvalue + alpha * (reward + disc * next_value - qvalue)
+        new_value = (1 - alpha) * qvalue + alpha * (reward + disc * next_value)
+
+        self.setQValue(state, action, new_value)
         # util.raiseNotDefined()
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
-        
+
     def getValue(self, state):
         return self.computeValueFromQValues(state)
 
