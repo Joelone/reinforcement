@@ -1,14 +1,19 @@
 # graphicsGridworldDisplay.py
 # ---------------------------
-# Licensing Information: Please do not distribute or publish solutions to this
-# project. You are free to use and extend these projects for educational
-# purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
-# John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and Pieter 
-# Abbeel in Spring 2013.
-# For more info, see http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html
+# Licensing Information:  You are free to use or extend these projects for
+# educational purposes provided that (1) you do not distribute or publish
+# solutions, (2) you retain this notice, and (3) you provide clear
+# attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
+#
+# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
+# The core projects and autograders were primarily created by John DeNero
+# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+# Student side autograding was added by Brad Miller, Nick Hay, and
+# Pieter Abbeel (pabbeel@cs.berkeley.edu).
+
 
 import util
+import functools
 from graphicsUtils import *
 
 class GraphicsGridworldDisplay:
@@ -128,7 +133,7 @@ def drawQValues(gridworld, qValues, currentState = None, message = 'State-Action
     grid = gridworld.grid
     blank()
     stateCrossActions = [[(state, action) for action in gridworld.getPossibleActions(state)] for state in gridworld.getStates()]
-    qStates = reduce(lambda x,y: x+y, stateCrossActions, [])
+    qStates = functools.reduce(lambda x,y: x+y, stateCrossActions, [])
     qValueList = [qValues[(state, action)] for state, action in qStates] + [0.0]
     minValue = min(qValueList)
     maxValue = max(qValueList)
@@ -340,5 +345,5 @@ def to_grid(point):
     (x, y) = point
     x = int ((y - MARGIN + GRID_SIZE * 0.5) / GRID_SIZE)
     y = int ((x - MARGIN + GRID_SIZE * 0.5) / GRID_SIZE)
-    print point, "-->", (x, y)
+    print (point, "-->", (x, y))
     return (x, y)

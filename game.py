@@ -1,12 +1,16 @@
 # game.py
 # -------
-# Licensing Information: Please do not distribute or publish solutions to this
-# project. You are free to use and extend these projects for educational
-# purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
-# John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and Pieter 
-# Abbeel in Spring 2013.
-# For more info, see http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html
+# Licensing Information:  You are free to use or extend these projects for
+# educational purposes provided that (1) you do not distribute or publish
+# solutions, (2) you retain this notice, and (3) you provide clear
+# attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
+#
+# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
+# The core projects and autograders were primarily created by John DeNero
+# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+# Student side autograding was added by Brad Miller, Nick Hay, and
+# Pieter Abbeel (pabbeel@cs.berkeley.edu).
+
 
 # game.py
 # -------
@@ -124,6 +128,7 @@ class AgentState:
         self.isPacman = isPacman
         self.scaredTimer = 0
         self.numCarrying = 0
+        self.numReturned = 0
 
     def __str__( self ):
         if self.isPacman:
@@ -144,6 +149,7 @@ class AgentState:
         state.configuration = self.configuration
         state.scaredTimer = self.scaredTimer
         state.numCarrying = self.numCarrying
+        state.numReturned = self.numReturned
         return state
 
     def getPosition(self):
@@ -258,7 +264,7 @@ class Grid:
 
     def _unpackInt(self, packed, size):
         bools = []
-        if packed < 0: raise ValueError, "must be a positive integer"
+        if packed < 0: raise ValueError("must be a positive integer")
         for i in range(size):
             n = 2 ** (self.CELLS_PER_INT - i - 1)
             if packed >= n:
@@ -421,8 +427,8 @@ class GameStateData:
         for i, state in enumerate( self.agentStates ):
             try:
                 int(hash(state))
-            except TypeError, e:
-                print e
+            except TypeError (e):
+                print (e)
                 #hash(state)
         return int((hash(tuple(self.agentStates)) + 13*hash(self.food) + 113* hash(tuple(self.capsules)) + 7 * hash(self.score)) % 1048575 )
 
@@ -592,7 +598,7 @@ class Game:
                             self.agentTimeout = True
                             self._agentCrash(i, quiet=True)
                             return
-                    except Exception,data:
+                    except Exception(data):
                         self._agentCrash(i, quiet=False)
                         self.unmute()
                         return
@@ -622,7 +628,7 @@ class Game:
                             skip_action = True
                         move_time += time.time() - start_time
                         self.unmute()
-                    except Exception,data:
+                    except Exception(data):
                         self._agentCrash(agentIndex, quiet=False)
                         self.unmute()
                         return
@@ -671,7 +677,7 @@ class Game:
                         self.unmute()
                         return
                     self.unmute()
-                except Exception,data:
+                except Exception(data):
                     self._agentCrash(agentIndex)
                     self.unmute()
                     return
@@ -684,7 +690,7 @@ class Game:
             if self.catchExceptions:
                 try:
                     self.state = self.state.generateSuccessor( agentIndex, action )
-                except Exception,data:
+                except Exception(data):
                     self.mute(agentIndex)
                     self._agentCrash(agentIndex)
                     self.unmute()
@@ -714,7 +720,7 @@ class Game:
                     self.mute(agentIndex)
                     agent.final( self.state )
                     self.unmute()
-                except Exception,data:
+                except Exception(data):
                     if not self.catchExceptions: raise
                     self._agentCrash(agentIndex)
                     self.unmute()

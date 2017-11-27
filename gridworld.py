@@ -1,12 +1,16 @@
 # gridworld.py
 # ------------
-# Licensing Information: Please do not distribute or publish solutions to this
-# project. You are free to use and extend these projects for educational
-# purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
-# John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and Pieter 
-# Abbeel in Spring 2013.
-# For more info, see http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html
+# Licensing Information:  You are free to use or extend these projects for
+# educational purposes provided that (1) you do not distribute or publish
+# solutions, (2) you retain this notice, and (3) you provide clear
+# attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
+#
+# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
+# The core projects and autograders were primarily created by John DeNero
+# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+# Student side autograding was added by Brad Miller, Nick Hay, and
+# Pieter Abbeel (pabbeel@cs.berkeley.edu).
+
 
 import random
 import sys
@@ -331,7 +335,7 @@ def getUserAction(state, actionFunction):
         action = actions[0]
     return action
 
-def printString(x): print x
+def printString(x): print (x)
 
 def runEpisode(agent, environment, discount, decision, display, message, pause, episode):
     returns = 0
@@ -426,7 +430,7 @@ def parseOptions():
     opts, args = optParser.parse_args()
 
     if opts.manual and opts.agent != 'q':
-        print '## Disabling Agents in Manual Mode (-m) ##'
+        print ('## Disabling Agents in Manual Mode (-m) ##')
         opts.agent = None
 
     # MANAGE CONFLICTS
@@ -559,14 +563,14 @@ if __name__ == '__main__':
     # RUN EPISODES
     if opts.episodes > 0:
         print
-        print "RUNNING", opts.episodes, "EPISODES"
+        print ("RUNNING", opts.episodes, "EPISODES")
         print
     returns = 0
     for episode in range(1, opts.episodes+1):
         returns += runEpisode(a, env, opts.discount, decisionCallback, displayCallback, messageCallback, pauseCallback, episode)
     if opts.episodes > 0:
         print
-        print "AVERAGE RETURNS FROM START STATE: "+str((returns+0.0) / opts.episodes)
+        print ("AVERAGE RETURNS FROM START STATE: "+str((returns+0.0) / opts.episodes))
         print
         print
 

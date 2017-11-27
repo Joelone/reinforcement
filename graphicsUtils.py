@@ -1,12 +1,16 @@
 # graphicsUtils.py
 # ----------------
-# Licensing Information: Please do not distribute or publish solutions to this
-# project. You are free to use and extend these projects for educational
-# purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
-# John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and Pieter 
-# Abbeel in Spring 2013.
-# For more info, see http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html
+# Licensing Information:  You are free to use or extend these projects for
+# educational purposes provided that (1) you do not distribute or publish
+# solutions, (2) you retain this notice, and (3) you provide clear
+# attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
+#
+# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
+# The core projects and autograders were primarily created by John DeNero
+# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+# Student side autograding was added by Brad Miller, Nick Hay, and
+# Pieter Abbeel (pabbeel@cs.berkeley.edu).
+
 
 import sys
 import math
@@ -14,7 +18,7 @@ import random
 import string
 import time
 import types
-import Tkinter
+import tkinter
 
 _Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 
@@ -64,14 +68,14 @@ def begin_graphics(width=640, height=480, color=formatColor(0, 0, 0), title=None
     _bg_color = color
 
     # Create the root window
-    _root_window = Tkinter.Tk()
+    _root_window = tkinter.Tk()
     _root_window.protocol('WM_DELETE_WINDOW', _destroy_window)
     _root_window.title(title or 'Graphics Window')
     _root_window.resizable(0, 0)
 
     # Create the canvas object
     try:
-        _canvas = Tkinter.Canvas(_root_window, width=width, height=height)
+        _canvas = tkinter.Canvas(_root_window, width=width, height=height)
         _canvas.pack()
         draw_background()
         _canvas.update()
@@ -143,8 +147,8 @@ def end_graphics():
             sleep(1)
             if _root_window != None:
                 _root_window.destroy()
-        except SystemExit, e:
-            print 'Ending graphics raised an exception:', e
+        except SystemExit(e):
+            print ('Ending graphics raised an exception:', e)
     finally:
         _root_window = None
         _canvas = None
@@ -283,8 +287,10 @@ def _clear_keys(event=None):
     _keyswaiting = {}
     _got_release = None
 
-def keys_pressed(d_o_e=Tkinter.tkinter.dooneevent,
-                 d_w=Tkinter.tkinter.DONT_WAIT):
+def keys_pressed(d_o_e=lambda arg: _root_window.dooneevent(arg),
+        d_w=tkinter._tkinter.DONT_WAIT):
+# def keys_pressed(d_o_e=tkinter._tkinter.dooneevent,
+#                  d_w=tkinter._tkinter.DONT_WAIT):
     d_o_e(d_w)
     if _got_release:
         d_o_e(d_w)
@@ -306,8 +312,8 @@ def wait_for_keys():
     return keys
 
 def remove_from_screen(x,
-                       d_o_e=Tkinter.tkinter.dooneevent,
-                       d_w=Tkinter.tkinter.DONT_WAIT):
+                       d_o_e=lambda arg: _root_window.dooneevent(arg),
+                        d_w=tkinter._tkinter.DONT_WAIT):
     _canvas.delete(x)
     d_o_e(d_w)
 
@@ -318,8 +324,8 @@ def _adjust_coords(coord_list, x, y):
     return coord_list
 
 def move_to(object, x, y=None,
-            d_o_e=Tkinter.tkinter.dooneevent,
-            d_w=Tkinter.tkinter.DONT_WAIT):
+            d_o_e=lambda arg: _root_window.dooneevent(arg),
+            d_w=tkinter._tkinter.DONT_WAIT):
     if y is None:
         try: x, y = x
         except: raise  'incomprehensible coordinates'
@@ -340,11 +346,11 @@ def move_to(object, x, y=None,
     d_o_e(d_w)
 
 def move_by(object, x, y=None,
-            d_o_e=Tkinter.tkinter.dooneevent,
-            d_w=Tkinter.tkinter.DONT_WAIT, lift=False):
+            d_o_e=lambda arg: _root_window.dooneevent(arg),
+            d_w=tkinter._tkinter.DONT_WAIT, lift=False):
     if y is None:
         try: x, y = x
-        except: raise Exception, 'incomprehensible coordinates'
+        except: raise Exception('incomprehensible coordinates')
 
     horiz = True
     newCoords = []
